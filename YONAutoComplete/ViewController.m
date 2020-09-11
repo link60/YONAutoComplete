@@ -31,6 +31,7 @@
     self.autoComplete.completionsFileName = @"other";
     self.autoComplete.maxCompletions = 7;
     self.autoComplete.superDelegate = self;
+    self.autoComplete.hideCompletionList = YES;
     
     [textField becomeFirstResponder];
 }

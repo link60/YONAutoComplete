@@ -33,6 +33,9 @@
 /// Don't auto-complete until the number of possible completions is maxCompletions or less (default is 0 = no limit)
 @property (nonatomic, assign) NSInteger maxCompletions;
 
+/// Hide completion list
+@property (nonatomic, assign) BOOL hideCompletionList;
+
 /// TextField Delegate
 @property (nonatomic, assign) id<UITextFieldDelegate> superDelegate;
 

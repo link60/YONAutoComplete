@@ -47,7 +47,7 @@
 - (void)updateFrame
 {
     CGFloat maxWidth = CGRectGetWidth(_maxFrame);
-    CGSize newSize = self.text.length && !self.shouldHideCompletions ? [self sizeThatFits:CGSizeMake(maxWidth, MAXFLOAT)] : CGSizeZero;
+    CGSize newSize = self.text.length && !(self.hideCompletionList || self.shouldHideCompletions) ? [self sizeThatFits:CGSizeMake(maxWidth, MAXFLOAT)] : CGSizeZero;
     CGRect newFrame = _maxFrame;
     if (self.superview == self.textField.superview) {
         newFrame.size = CGSizeMake(MAX(newSize.width, maxWidth), MIN(newSize.height, CGRectGetHeight(_maxFrame)));

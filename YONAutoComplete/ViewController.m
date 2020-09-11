@@ -30,8 +30,26 @@
     textField.delegate = self.autoComplete;
     self.autoComplete.completionsFileName = @"other";
     self.autoComplete.maxCompletions = 7;
-
+    self.autoComplete.superDelegate = self;
+    
     [textField becomeFirstResponder];
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    NSLog(@"textFieldDidEndEditing");
+}
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    NSLog(@"textFieldShouldReturn");
+    return YES;
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    NSLog(@"shouldChangeCharactersInRange");
+    return NO;
 }
 
 @end

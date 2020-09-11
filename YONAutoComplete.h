@@ -33,4 +33,7 @@
 /// Don't auto-complete until the number of possible completions is maxCompletions or less (default is 0 = no limit)
 @property (nonatomic, assign) NSInteger maxCompletions;
 
+/// TextField Delegate
+@property (nonatomic, assign) id<UITextFieldDelegate> superDelegate;
+
 @end

@@ -24,6 +24,13 @@
 @end
 
 
+//- (void)textFieldDidBeginEditing:(UITextField *)textField;           // became first responder
+//- (BOOL)textFieldShouldEndEditing:(UITextField *)textField;          // return YES to allow editing to stop and to resign first responder status. NO to disallow the editing session to end
+//- (void)textFieldDidEndEditing:(UITextField *)textField reason:(UITextFieldDidEndEditingReason)reason API_AVAILABLE(ios(10.0)); // if implemented, called in place of textFieldDidEndEditing:
+//- (void)textFieldDidChangeSelection:(UITextField *)textField API_AVAILABLE(ios(13.0), tvos(13.0));
+
+
+
 @interface YONAutoComplete ()
 
 @property (nonatomic, strong) NSMutableArray *matchingCompletions;
@@ -141,7 +148,10 @@
     if (!self.completions) {
         [self readCompletionsFromFile];
     }
-
+    
+    if ([self.superDelegate respondsToSelector:@selector(textFieldShouldBeginEditing:)]) {
+        return [self.superDelegate textFieldShouldBeginEditing:textField];
+    }
     return YES;
 }
 
@@ -269,12 +279,20 @@
     UITextPosition *selStart = [textField positionFromPosition:beginning offset:newText.length];
     UITextPosition *selEnd = [textField positionFromPosition:beginning offset:bestCompletion.length];
     textField.selectedTextRange = [textField textRangeFromPosition:selStart toPosition:selEnd];
+    
+    if ([self.superDelegate respondsToSelector:@selector(textField:shouldChangeCharactersInRange:replacementString:)]) {
+        return [self.superDelegate textField:textField shouldChangeCharactersInRange:range replacementString:string];
+    }
     return NO;
 }
 
 - (BOOL)textFieldShouldClear:(UITextField *)textField
 {
     [self resetCompletions];
+    
+    if ([self.superDelegate respondsToSelector:@selector(textFieldShouldClear:)]) {
+        return [self.superDelegate textFieldShouldClear:textField];
+    }
     return YES;
 }
 
@@ -287,7 +305,10 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [textField resignFirstResponder];
-
+    
+    if ([self.superDelegate respondsToSelector:@selector(textFieldShouldReturn:)]) {
+        return [self.superDelegate textFieldShouldReturn:textField];
+    }
     return YES;
 }
 
@@ -308,6 +329,10 @@
             NSString *completionsString = [newCompletions componentsJoinedByString:@"\n"];
             [completionsString writeToFile:[self completionsFilePath] atomically:NO encoding:NSUTF8StringEncoding error:NULL];
         }
+    }
+    
+    if ([self.superDelegate respondsToSelector:@selector(textFieldDidEndEditing:)]) {
+        [self.superDelegate textFieldDidEndEditing:textField];
     }
 }
 
